@@ -3,10 +3,15 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import { useAuth } from "@/components/AuthProvider";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Input from "@/components/ui/Input";
 import { api } from "@/lib/api/client";
 
 function LoginForm() {
   const router = useRouter();
+  const { refresh } = useAuth();
   const next = useSearchParams().get("next") ?? "/dashboard";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,62 +27,52 @@ function LoginForm() {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
+      await refresh();
       router.replace(next);
-      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed.");
-    } finally {
       setPending(false);
     }
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex w-full max-w-sm flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Sign in</h1>
+    <Card className="w-full max-w-sm" header="Sign in">
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
+        {error ? (
+          <p role="alert" className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+            {error}
+          </p>
+        ) : null}
 
-      {error ? (
-        <p role="alert" className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-          {error}
-        </p>
-      ) : null}
-
-      <label className="flex flex-col gap-1 text-sm">
-        Email
-        <input
+        <Input
+          label="Email"
           type="email"
           required
+          autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-md border border-black/15 px-3 py-2"
         />
-      </label>
-
-      <label className="flex flex-col gap-1 text-sm">
-        Password
-        <input
+        <Input
+          label="Password"
           type="password"
           required
+          autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded-md border border-black/15 px-3 py-2"
         />
-      </label>
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-md bg-black px-4 py-2 text-white disabled:opacity-50"
-      >
-        {pending ? "Signing in…" : "Sign in"}
-      </button>
+        <Button type="submit" loading={pending}>
+          Sign in
+        </Button>
 
-      <p className="text-sm opacity-70">
-        No account?{" "}
-        <Link href="/register" className="underline">
-          Register
-        </Link>
-      </p>
-    </form>
+        <p className="text-sm opacity-70">
+          No account?{" "}
+          <Link href="/register" className="underline">
+            Register
+          </Link>
+        </p>
+      </form>
+    </Card>
   );
 }
 
