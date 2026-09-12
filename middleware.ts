@@ -5,6 +5,7 @@ import { getSession } from "@/lib/auth/guard";
 const PROTECTED = [
   "/dashboard",
   "/workouts",
+  "/exercises",
   "/goals",
   "/plans",
   "/profile",
@@ -37,6 +38,7 @@ export const config = {
   matcher: [
     "/dashboard/:path*",
     "/workouts/:path*",
+    "/exercises/:path*",
     "/goals/:path*",
     "/plans/:path*",
     "/profile/:path*",
