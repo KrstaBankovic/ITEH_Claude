@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+sed -i -E '/^(🤖 )?Generated with \[?Claude Code\]?/d; /^Co-[Aa]uthored-[Bb]y: Claude/d; /^Claude-Session:/d' "$1"
