@@ -1,12 +1,13 @@
 import { SignJWT, jwtVerify } from "jose";
 import type { NextRequest } from "next/server";
 import { ApiError } from "@/lib/api/withApi";
+import { ROLE_VALUES, type Role } from "@/lib/domain";
 
 export const SESSION_COOKIE = "gt_session";
 const SESSION_DAYS = 7;
 
-export const ROLES = ["MEMBER", "TRAINER", "ADMIN"] as const;
-export type Role = (typeof ROLES)[number];
+export const ROLES = ROLE_VALUES;
+export type { Role };
 
 export type Session = { userId: number; email: string; role: Role };
 

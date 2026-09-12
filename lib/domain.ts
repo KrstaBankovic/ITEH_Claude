@@ -6,6 +6,9 @@
  * therefore lives here, where there is no database import to follow.
  */
 
+export const ROLE_VALUES = ["MEMBER", "TRAINER", "ADMIN"] as const;
+export type Role = (typeof ROLE_VALUES)[number];
+
 export const GOAL_TYPES = ["MAX_WEIGHT", "TOTAL_VOLUME", "SESSION_COUNT", "BODY_WEIGHT"] as const;
 export const GOAL_STATUSES = ["ACTIVE", "ACHIEVED", "ABANDONED"] as const;
 
