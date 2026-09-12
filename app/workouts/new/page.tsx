@@ -3,10 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AddSetForm from "@/components/AddSetForm";
+import RestTimer from "@/components/RestTimer";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
+import { useRestTimer } from "@/hooks/useRestTimer";
 import { api } from "@/lib/api/client";
 import { fetchAllExercises } from "@/lib/api/exercises";
 import type { Exercise } from "@/lib/controllers/exercises.controller";
@@ -30,6 +32,7 @@ export default function NewWorkoutPage() {
   const [sets, setSets] = useState<WorkoutSet[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const timer = useRestTimer(90);
 
   useEffect(() => {
     void fetchAllExercises()
@@ -128,9 +131,15 @@ export default function NewWorkoutPage() {
               onAdded={(set) => {
                 setSets((current) => [...current, set]);
                 setError(null);
+                // Logging a set starts the rest clock automatically.
+                timer.start();
               }}
               onError={setError}
             />
+          </Card>
+
+          <Card header="Rest timer">
+            <RestTimer timer={timer} />
           </Card>
 
           {sets.length > 0 ? (

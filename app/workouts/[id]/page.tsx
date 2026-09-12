@@ -4,11 +4,13 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AddSetForm from "@/components/AddSetForm";
 import { useAuth } from "@/components/AuthProvider";
+import RestTimer from "@/components/RestTimer";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
+import { useRestTimer } from "@/hooks/useRestTimer";
 import { api } from "@/lib/api/client";
 import { fetchAllExercises } from "@/lib/api/exercises";
 import type { Exercise } from "@/lib/controllers/exercises.controller";
@@ -30,6 +32,7 @@ export default function WorkoutDetailPage() {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const timer = useRestTimer(90);
 
   useEffect(() => {
     void (async () => {
@@ -244,9 +247,15 @@ export default function WorkoutDetailPage() {
               onAdded={(set) => {
                 setSets((current) => [...current, set]);
                 setError(null);
+                // Logging a set starts the rest clock automatically.
+                timer.start();
               }}
               onError={setError}
             />
+          </Card>
+
+          <Card header="Rest timer">
+            <RestTimer timer={timer} />
           </Card>
 
           <div>
