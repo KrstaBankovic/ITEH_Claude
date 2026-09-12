@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import type { ZodType } from "zod";
 
 export type ApiErrorCode =
   | "VALIDATION_ERROR"
@@ -34,6 +35,24 @@ export function json(
 
 export function noContent(): NextResponse {
   return new NextResponse(null, { status: 204 });
+}
+
+/** Validates input against a zod schema, or throws the 422 error envelope. */
+export function parse<T>(schema: ZodType<T>, input: unknown): T {
+  const result = schema.safeParse(input);
+  if (!result.success) {
+    throw new ApiError(422, "VALIDATION_ERROR", "Request payload is invalid.", result.error.issues);
+  }
+  return result.data;
+}
+
+/** Body of a request that may legitimately be empty or malformed JSON. */
+export async function readJson(req: NextRequest): Promise<unknown> {
+  try {
+    return await req.json();
+  } catch {
+    return {};
+  }
 }
 
 /**
