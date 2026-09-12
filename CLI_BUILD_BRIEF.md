@@ -18,7 +18,7 @@ The human has already done the setup in `MANUAL_SETUP.md`. Before phase P0, conf
 
 ```bash
 node -v                                    # 20+
-git config user.email                      # krstab0@gmail.com
+git config user.email                      # 76056923+KrstaBankovic@users.noreply.github.com
 git config core.hooksPath                  # .githooks
 ls .githooks/commit-msg                    # exists, executable
 ls .claude/settings.json                   # exists
@@ -90,7 +90,7 @@ Before each commit:
 npm run build                                                  # must exit 0
 npx tsc --noEmit                                               # zero errors
 git status --porcelain                                         # nothing unintended staged
-git log -1 --format='%an <%ae>'                                # KrstaBankovic <krstab0@gmail.com>
+git log -1 --format='%an <%ae>'                                # KrstaBankovic <76056923+KrstaBankovic@users.noreply.github.com>
 ```
 
 ## 5. Final verification

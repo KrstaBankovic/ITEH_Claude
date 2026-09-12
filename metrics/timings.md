@@ -1,6 +1,6 @@
 # Phase timings — Claude Code
 
-Model: <fill in>
+Model: claude-opus-5
 
 | Phase | Start | End | Turns | Notes |
 |---|---|---|---|---|

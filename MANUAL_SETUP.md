@@ -60,7 +60,7 @@ Already set, but verify — a single commit under the wrong identity is easy to 
 ```bash
 cd ~/KRSTA/ITEH_Claude
 git config user.name    # KrstaBankovic
-git config user.email   # krstab0@gmail.com
+git config user.email   # 76056923+KrstaBankovic@users.noreply.github.com
 ```
 
 ---
