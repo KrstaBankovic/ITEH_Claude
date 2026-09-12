@@ -320,3 +320,30 @@ Note the model in your metrics file, and use the same model for the whole run �
 - [ ] `git log --format='%an <%ae>' | sort -u` → one identity
 - [ ] `git log --all --format='%B' | grep -i -E 'claude|co-authored|generated with'` → nothing
 - [ ] `metrics/REPORT.md` generated, manual phase timings recorded
+
+---
+
+## 12. Post-P0 check (both repos)
+
+Next 16's dev server generates an agent policy file on first `npm run dev` and will
+overwrite an existing one — `CLAUDE.md` for Claude Code, `AGENTS.md` for other agents.
+That silently removes the Layer-2 attribution rule from plan §11.3.
+
+After P0 in **each** repo, before anything else:
+
+```bash
+git diff --exit-code -- CLAUDE.md AGENTS.md GEMINI.md   # must be clean
+grep -n "agentRules" next.config.ts                      # must show agentRules: false
+```
+
+If the policy file was overwritten: `git checkout -- <file>` and set `agentRules: false`
+in `next.config.ts`. This is policy infrastructure, human-owned per brief rule 7, and
+does not count as agent repair under plan §1 rule 4.
+
+## 13. Repo B pinning
+
+Scaffold Repo B with the same version Repo A used, not `@latest`:
+
+    npx create-next-app@16.3.5
+
+`@latest` will have moved by then, which would make the two runs incomparable.
